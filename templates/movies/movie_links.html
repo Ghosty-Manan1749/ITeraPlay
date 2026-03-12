@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Links for {{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <a href="{% url 'home' %}" class="btn btn-outline-light mb-3">
+            &larr; Back to Browse
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <!-- Video Player Column -->
+    <div class="col-lg-8 mb-4">
+        <div class="card bg-dark text-white border-secondary mb-4">
+            <div class="card-body p-4 rounded" style="background-color: #0d0d0d;">
+                <h4 class="mb-4 text-center fw-bold text-danger">Direct Movie Links</h4>
+
+                <div class="mb-4">
+                    <label class="form-label text-muted fw-bold mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-play-circle me-1" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+                        </svg> Streaming Link (CDN)
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-secondary text-white border-secondary fs-6 py-2"
+                            id="streamInput" value="{{ movie.stream_link }}" readonly>
+                        <button class="btn btn-danger px-4 fw-bold" type="button"
+                            onclick="copyToClipboard('streamInput', this)">Copy</button>
+                    </div>
+                    <small class="text-muted mt-1 d-block">Use this link in a supported media player or browser
+                        extension.</small>
+                </div>
+
+                <div>
+                    <label class="form-label text-muted fw-bold mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-download me-1" viewBox="0 0 16 16">
+                            <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                            <path
+                                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                        </svg> Download Link (CDN)
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-secondary text-white border-secondary fs-6 py-2"
+                            id="downloadInput" value="{{ movie.download_link }}" readonly>
+                        <button class="btn btn-danger px-4 fw-bold" type="button"
+                            onclick="copyToClipboard('downloadInput', this)">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h2 mb-0 fw-bold">{{ movie.title }}</h1>
+            <span class="badge bg-danger rounded-pill px-3 py-2 fs-6">{{ movie.release_date|date:"Y" }}</span>
+        </div>
+
+        <p class="text-muted fs-5 mt-3">{{ movie.description }}</p>
+    </div>
+
+    <!-- Sidebar / Additional Info Column (Optional - placeholder for now) -->
+    <div class="col-lg-4 d-none d-lg-block">
+        <div class="card bg-dark text-white border-secondary rounded overflow-hidden sticky-top" style="top: 20px;">
+            {% if movie.poster %}
+            <img src="{{ movie.poster.url }}" class="card-img-top img-fluid w-100" alt="{{ movie.title }}"
+                style="object-fit: cover;">
+            {% else %}
+            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 400px;">
+                <span class="text-white-50">No Poster Available</span>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title fw-bold border-bottom border-secondary pb-2">About</h5>
+                <p class="mb-1"><small class="text-muted">Added on:</small> {{ movie.created_at|date:"M d, Y" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyToClipboard(inputId, btnElement) {
+        var copyText = document.getElementById(inputId);
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value).then(function () {
+            // Provide feedback
+            var originalText = btnElement.innerText;
+            btnElement.innerText = "Copied!";
+            btnElement.classList.replace("btn-danger", "btn-success");
+
+            setTimeout(function () {
+                btnElement.innerText = originalText;
+                btnElement.classList.replace("btn-success", "btn-danger");
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card bg-dark text-white border-secondary p-4 shadow-lg rounded">
+            <h2 class="mb-4 text-danger fw-bold border-bottom border-secondary pb-2">User Profile</h2>
+
+            <div class="mb-3">
+                <p class="fs-5"><strong class="text-muted">Username:</strong> {{ user.username }}</p>
+                <p class="fs-5"><strong class="text-muted">Email:</strong> {{ user.email }}</p>
+                <p class="fs-5"><strong class="text-muted">Role:</strong> {% if user.profile.is_admin %}Admin{% else
+                    %}Standard User{% endif %}</p>
+                <p class="fs-5"><strong class="text-muted">Member Since:</strong> {{ user.date_joined|date:"F j, Y" }}
+                </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-top border-secondary">
+                <a href="{% url 'home' %}" class="btn btn-outline-light me-2">Back to Browse</a>
+                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

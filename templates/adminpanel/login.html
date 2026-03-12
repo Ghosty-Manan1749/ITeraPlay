@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card bg-dark text-white border-danger p-4 shadow-lg rounded">
+            <h2 class="text-center mb-4 text-danger fw-bold">Admin Portal</h2>
+            <p class="text-center text-muted mb-4">Authorized Personnel Only</p>
+
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Admin Username</label>
+                    <input type="text" class="form-control bg-secondary text-white border-0" id="username"
+                        name="username" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control bg-secondary text-white border-0" id="password"
+                        name="password" required>
+                </div>
+                <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Login to Dashboard</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
