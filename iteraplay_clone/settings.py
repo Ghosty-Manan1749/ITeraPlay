@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-+f5^ou25c_0679)g0$b5n-qofgo&47jfenn1a)f%gl#xhv8hz7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['iteraplay-1fmv.onrender.com']
+ALLOWED_HOSTS = [
+    "iteraplay-1fmv.onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
 
 
 # Application definition

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from movies.models import Movie
@@ -60,3 +60,36 @@ def upload_movie(request):
         return redirect('admin_dashboard')
         
     return render(request, 'adminpanel/upload_movie.html')
+
+@login_required(login_url='admin_login')
+def edit_movie(request, movie_id):
+    if not getattr(request.user, 'profile', None) or not request.user.profile.is_admin:
+        return redirect('home')
+        
+    movie = get_object_or_404(Movie, id=movie_id)
+    if request.method == 'POST':
+        movie.title = request.POST.get('title')
+        movie.description = request.POST.get('description')
+        if request.FILES.get('poster'):
+            movie.poster = request.FILES.get('poster')
+        if request.FILES.get('banner'):
+            movie.banner = request.FILES.get('banner')
+        movie.stream_link = request.POST.get('stream_link')
+        movie.download_link = request.POST.get('download_link')
+        movie.release_date = request.POST.get('release_date')
+        movie.is_trending = request.POST.get('is_trending') == 'on'
+        movie.is_new = request.POST.get('is_new') == 'on'
+        movie.save()
+        return redirect('admin_dashboard')
+        
+    return render(request, 'adminpanel/edit_movie.html', {'movie': movie})
+
+@login_required(login_url='admin_login')
+def delete_movie(request, movie_id):
+    if not getattr(request.user, 'profile', None) or not request.user.profile.is_admin:
+        return redirect('home')
+        
+    movie = get_object_or_404(Movie, id=movie_id)
+    if request.method == 'POST':
+        movie.delete()
+    return redirect('admin_dashboard')
