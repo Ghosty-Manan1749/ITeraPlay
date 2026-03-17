@@ -33,6 +33,20 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="category" class="form-label fw-bold">Category</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <select class="form-select bg-secondary text-white border-0" id="category" name="category"
+                                required>
+                                <option value="">Select a Category</option>
+                                {% for cat in categories %}
+                                <option value="{{cat.id}}">{{cat.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="button" class="btn btn-outline-light" onclick="openCategoryPopup()">➕</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="stream_link" class="form-label fw-bold">Streaming Link (CDN)</label>
                         <input type="url" class="form-control bg-secondary text-white border-0" id="stream_link"
                             name="stream_link" placeholder="https://..." required>
@@ -78,4 +92,29 @@
         </div>
     </div>
 </div>
+
+<!-- Popup for Adding Category -->
+<div id="categoryPopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#212529; border:1px solid #dc3545; padding:20px; z-index:1000; border-radius:8px; width:300px;">
+    <h5 class="text-white mb-3">Add Category</h5>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" class="form-control mb-3 bg-secondary text-white border-0" placeholder="Category Name" required>
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" onclick="closeCategoryPopup()">Cancel</button>
+            <button type="submit" name="add_category" class="btn btn-danger">Add</button>
+        </div>
+    </form>
+</div>
+<div id="categoryOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeCategoryPopup()"></div>
+
+<script>
+function openCategoryPopup() {
+    document.getElementById("categoryPopup").style.display = "block";
+    document.getElementById("categoryOverlay").style.display = "block";
+}
+function closeCategoryPopup() {
+    document.getElementById("categoryPopup").style.display = "none";
+    document.getElementById("categoryOverlay").style.display = "none";
+}
+</script>
 {% endblock %}
